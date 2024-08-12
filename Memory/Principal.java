@@ -1,5 +1,4 @@
 package Memory;
-
 //programa que contiene el juego 
 import javax.swing.*;
 import java.awt.*;
@@ -123,5 +122,10 @@ public class Principal extends JFrame implements ActionListener  {
             }
         }
         return false;
+    }
+     // Este es el punto de entrada del programa
+     public static void main(String[] args) {
+        // Inicia el juego
+        new Principal();
     }
 }
