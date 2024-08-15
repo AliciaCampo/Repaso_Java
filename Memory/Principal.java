@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 public class Principal extends JFrame implements ActionListener {
-    private static final int TAMAÑO = 3; // Ajuste a 3x3 para tener 9 botones
-    private JButton[][] buttons = new JButton[TAMAÑO][TAMAÑO];
-    private ImageIcon[] imagenes = new ImageIcon[5]; // 4 imágenes dobles + 1 interrogante
+    private static final int TAMAÑO = 2; // Ajustar a 4x2 para tener 8 botones
+    private JButton[][] buttons = new JButton[TAMAÑO][TAMAÑO * 2]; // 4x2 grid
+    private ImageIcon[] imagenes = new ImageIcon[4]; // 4 imágenes dobles
     private ImageIcon interrogante;
-    private int[][] posiciones = new int[TAMAÑO][TAMAÑO];
+    private int[][] posiciones = new int[TAMAÑO][TAMAÑO * 2];
     private JButton primerButton = null;
     private JButton segundoButton = null;
     private boolean estado = false;
@@ -22,7 +22,7 @@ public class Principal extends JFrame implements ActionListener {
     public Principal() {
         // Configurar la ventana
         this.setTitle("Juego Memory");
-        this.setLayout(new GridLayout(TAMAÑO, TAMAÑO));
+        this.setLayout(new GridLayout(TAMAÑO, TAMAÑO * 2)); // 4x2 grid
         // Cargar imágenes
         cargaImagenes();
         // Inicializar tablero
@@ -41,8 +41,6 @@ public class Principal extends JFrame implements ActionListener {
         }
         // Cargar la imagen del interrogante
         interrogante = new ImageIcon(getClass().getResource("/Memory/Imagenes/interrogante.png"));
-        // Asignar la imagen del interrogante en la última posición
-        imagenes[4] = interrogante;
     }
 
     private void iniciarTablero() {
@@ -52,16 +50,15 @@ public class Principal extends JFrame implements ActionListener {
             list.add(i);
             list.add(i);
         }
-        list.add(4); // Añadir la imagen del interrogante
         Collections.shuffle(list);
 
         // Asignar posiciones a la matriz de posiciones
         int index = 0;
         for (int i = 0; i < TAMAÑO; i++) {
-            for (int j = 0; j < TAMAÑO; j++) {
+            for (int j = 0; j < TAMAÑO * 2; j++) { // 4x2 grid
                 posiciones[i][j] = list.get(index++);
                 buttons[i][j] = new JButton();
-                buttons[i][j].setIcon(interrogante);
+                buttons[i][j].setIcon(interrogante); // Mostrar interrogante en el frente
                 buttons[i][j].addActionListener(this);
                 add(buttons[i][j]);
             }
@@ -77,7 +74,7 @@ public class Principal extends JFrame implements ActionListener {
         // Buscar la posición del botón clicado 
         int row = -1, col = -1;
         for (int i = 0; i < TAMAÑO; i++) {
-            for (int j = 0; j < TAMAÑO; j++) {
+            for (int j = 0; j < TAMAÑO * 2; j++) {
                 if (buttons[i][j] == botonclicado) {
                     row = i;
                     col = j;
@@ -132,7 +129,7 @@ public class Principal extends JFrame implements ActionListener {
 
     private int getButtonRow(JButton button) {
         for (int i = 0; i < TAMAÑO; i++) {
-            for (int j = 0; j < TAMAÑO; j++) {
+            for (int j = 0; j < TAMAÑO * 2; j++) {
                 if (buttons[i][j] == button) {
                     return i;
                 }
@@ -143,7 +140,7 @@ public class Principal extends JFrame implements ActionListener {
 
     private int getButtonCol(JButton button) {
         for (int i = 0; i < TAMAÑO; i++) {
-            for (int j = 0; j < TAMAÑO; j++) {
+            for (int j = 0; j < TAMAÑO * 2; j++) {
                 if (buttons[i][j] == button) {
                     return j;
                 }
@@ -154,7 +151,7 @@ public class Principal extends JFrame implements ActionListener {
 
     private boolean juegoTerminado() {
         for (int i = 0; i < TAMAÑO; i++) {
-            for (int j = 0; j < TAMAÑO; j++) {
+            for (int j = 0; j < TAMAÑO * 2; j++) {
                 if (buttons[i][j].isEnabled()) {
                     return false;
                 }
