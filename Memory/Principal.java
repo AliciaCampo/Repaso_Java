@@ -1,6 +1,6 @@
 package Memory;
 
-// Programa que contiene el juego 
+// Programa que contiene el juego
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,15 +9,15 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 public class Principal extends JFrame implements ActionListener {
-    private static final int TAMAÑO = 4;
+    private static final int TAMAÑO = 3; // Ajuste a 3x3 para tener 9 botones
     private JButton[][] buttons = new JButton[TAMAÑO][TAMAÑO];
-    private ImageIcon[] imagenes = new ImageIcon[8];
+    private ImageIcon[] imagenes = new ImageIcon[5]; // 4 imágenes dobles + 1 interrogante
     private ImageIcon interrogante;
     private int[][] posiciones = new int[TAMAÑO][TAMAÑO];
     private JButton primerButton = null;
     private JButton segundoButton = null;
     private boolean estado = false;
-    private int primerRow = -1, primerCol = -1; // Añadir variables de instancia para almacenar la posición del primer botón
+    private int primerRow = -1, primerCol = -1;
 
     public Principal() {
         // Configurar la ventana
@@ -35,24 +35,30 @@ public class Principal extends JFrame implements ActionListener {
     }
 
     private void cargaImagenes() {
-        for (int i = 0; i < 8; i++) {
-            imagenes[i] = new ImageIcon("Imagenes/img" + (i + 1) + ".png");
+        // Cargar 4 imágenes que aparecerán dos veces cada una
+        for (int i = 0; i < 4; i++) {
+            imagenes[i] = new ImageIcon(getClass().getResource("/Memory/Imagenes/img" + (i + 1) + ".png"));
         }
-        interrogante = new ImageIcon("Imagenes/interrogante.png");
+        // Cargar la imagen del interrogante
+        interrogante = new ImageIcon(getClass().getResource("/Memory/Imagenes/interrogante.png"));
+        // Asignar la imagen del interrogante en la última posición
+        imagenes[4] = interrogante;
     }
 
     private void iniciarTablero() {
-        // Crear una lista de posiciones de imágenes 
+        // Crear una lista de posiciones de imágenes
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             list.add(i);
             list.add(i);
         }
+        list.add(4); // Añadir la imagen del interrogante
         Collections.shuffle(list);
+
         // Asignar posiciones a la matriz de posiciones
         int index = 0;
-        for (int i = 0; i < TAMAÑO ; i++) {
-            for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < TAMAÑO; i++) {
+            for (int j = 0; j < TAMAÑO; j++) {
                 posiciones[i][j] = list.get(index++);
                 buttons[i][j] = new JButton();
                 buttons[i][j].setIcon(interrogante);
@@ -80,7 +86,7 @@ public class Principal extends JFrame implements ActionListener {
             }
         }
 
-        // Mostrar la imagen en el botón 
+        // Mostrar la imagen en el botón
         botonclicado.setIcon(imagenes[posiciones[row][col]]);
         if (primerButton == null) {
             primerButton = botonclicado;
@@ -105,7 +111,7 @@ public class Principal extends JFrame implements ActionListener {
     private void verificarPareja() {
         if (primerButton != null && segundoButton != null) {
             // Verificar si los índices de las imágenes coinciden
-            if (posiciones[primerRow][primerCol] == posiciones[primerButton.getLocation().x / (500 / TAMAÑO)][primerButton.getLocation().y / (500 / TAMAÑO)]) {
+            if (posiciones[primerRow][primerCol] == posiciones[getButtonRow(segundoButton)][getButtonCol(segundoButton)]) {
                 primerButton.setEnabled(false);
                 segundoButton.setEnabled(false);
             } else {
@@ -124,6 +130,28 @@ public class Principal extends JFrame implements ActionListener {
         }
     }
 
+    private int getButtonRow(JButton button) {
+        for (int i = 0; i < TAMAÑO; i++) {
+            for (int j = 0; j < TAMAÑO; j++) {
+                if (buttons[i][j] == button) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int getButtonCol(JButton button) {
+        for (int i = 0; i < TAMAÑO; i++) {
+            for (int j = 0; j < TAMAÑO; j++) {
+                if (buttons[i][j] == button) {
+                    return j;
+                }
+            }
+        }
+        return -1;
+    }
+
     private boolean juegoTerminado() {
         for (int i = 0; i < TAMAÑO; i++) {
             for (int j = 0; j < TAMAÑO; j++) {
@@ -132,7 +160,7 @@ public class Principal extends JFrame implements ActionListener {
                 }
             }
         }
-        return true; // Cambiado a true para indicar que el juego ha terminado
+        return true;
     }
 
     // Este es el punto de entrada del programa
