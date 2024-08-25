@@ -76,22 +76,29 @@ public class Movimiento {
         int dx = finX - inicioX;
         int dy = finY - inicioY;
         boolean esBlanca = pieza.esBlanca();
-        int direccion = esBlanca ? 1 : -1;
-
-        // Movimiento normal
+        int direccion = esBlanca ? -1 : 1;
+    
+        // Movimiento normal de una casilla hacia adelante
         if (dy == 0 && dx == direccion && tablero[finX][finY] == null) {
+            System.out.println("Movimiento normal de peón permitido.");
             return true;
         }
-        // Movimiento doble desde la posición inicial
-        if (dy == 0 && dx == 2 * direccion && inicioY == (esBlanca ? 1 : 6) && tablero[finX][finY] == null
-            && tablero[inicioX + direccion][inicioY] == null) {
+    
+        // Movimiento doble hacia adelante desde la posición inicial
+        if (dy == 0 && dx == 2 * direccion && inicioX == (esBlanca ? 6 : 1) 
+            && tablero[finX][finY] == null && tablero[inicioX + direccion][inicioY] == null) {
+            System.out.println("Movimiento doble desde la posición inicial permitido.");
             return true;
         }
+    
         // Captura diagonal
-        if (Math.abs(dy) == 1 && dx == direccion && tablero[finX][finY] != null
+        if (Math.abs(dy) == 1 && dx == direccion && tablero[finX][finY] != null 
             && tablero[finX][finY].esBlanca() != esBlanca) {
+            System.out.println("Captura diagonal permitida.");
             return true;
         }
+    
+        System.out.println("Movimiento de peón no permitido.");
         return false;
     }
 }

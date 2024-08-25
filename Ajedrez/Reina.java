@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 public class Reina extends Pieza {
     public Reina(boolean esBlanca) {
-        super(esBlanca);
+        super(esBlanca, esBlanca ? "damaBlanco.png" : "damaNegro.png");
     }
     @Override
     public boolean esMovimientoValido(int inicioX, int inicioY, int finX, int finY, Pieza[][] tablero) {
@@ -12,9 +12,9 @@ public class Reina extends Pieza {
         boolean movimientoDiagonal = Math.abs(finX - inicioX) == Math.abs(finY - inicioY);
         return movimientoRecto || movimientoDiagonal;
     }
-    @Override
+    /*@Override
     public void dibujar(Graphics g, int x, int y) {
         g.setColor(esBlanca ? Color.WHITE : Color.BLACK);
         g.fillRect(x + 20, y + 20, 60, 60);
-    }
+    }*/
 }
